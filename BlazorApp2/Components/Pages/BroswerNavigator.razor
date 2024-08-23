@@ -1,0 +1,38 @@
+﻿@using BlazorApp2.Models
+@inject NavigationManager navmag
+@page "/broswernavigator"
+<h3>BroswerNavigator</h3>
+<button @onclick="tornaindietro">Torna indietro</button>
+<button @onclick="cancellacronologia">Cancella</button>
+<button @onclick="mostradati">MostraDati</button>
+<div class="mostra-dati">
+    <h1>I tuoi dati salvati</h1>
+    <p id="datilist">
+        @listacronologia
+    </p>
+</div>
+ @code 
+{
+    public Navigatore navigatore = new Navigatore();
+    public Pagina pagina = new Pagina();
+    public string listacronologia;
+    private void tornaindietro()
+    {
+        pagina.SalvaTempoVisita((DateTime.Now.Subtract (pagina.oraAccesso)).Seconds);
+        pagina.indirizzo = navmag.Uri.ToString();
+        navigatore.paginaList.Add(pagina);
+    }
+
+    private void cancellacronologia()
+    {
+        navigatore.CancellaCronologia();
+    }
+    private void mostradati()
+    {
+        foreach (var item in navigatore.paginaList)
+        {
+            listacronologia += item.indirizzo; 
+        }
+    }
+}
+
